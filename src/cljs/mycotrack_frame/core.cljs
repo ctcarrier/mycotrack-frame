@@ -16,15 +16,7 @@
   (reagent/render [views/main-panel]
                   (.getElementById js/document "app")))
 
-(defn handle-species-http-event [species-response]
-  (dispatch [:species-response (js->clj species-response)]))
-
-(defn init-http-data []
-  (GET "/api/species" {:handler handle-species-http-event})
-  (dispatch [:update-project-list]))
-
 (defn ^:export init []
   (routes/app-routes)
   (re-frame/dispatch-sync [:initialize-db])
-  (mount-root)
-  (init-http-data))
+  (mount-root))

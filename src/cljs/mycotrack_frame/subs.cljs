@@ -2,7 +2,8 @@
     (:require-macros [reagent.ratom :refer [reaction]])
     (:require [re-frame.core :as re-frame]
               [reagent.ratom :refer [make-reaction]]
-              [ajax.core :refer [GET POST]]))
+              [ajax.core :refer [GET POST]]
+              [clojure.walk :refer [keywordize-keys]]))
 
 (defn find-first
          [f coll]
@@ -30,15 +31,30 @@
       :on-dispose #(do (re-frame/dispatch [:cleanup [:species]]))))))
 
 (re-frame/register-sub
+ :cultures
+ (fn [db [_ type]]
+   (let  [query-token (GET "/api/cultures" {
+                                            :handler (fn [cultures-response] (re-frame/dispatch [:cultures-response (js->clj cultures-response)]))
+                                            :headers [:Authorization "Basic dGVzdEBteWNvdHJhY2suY29tOnRlc3Q="]})]
+     (make-reaction
+      (fn [] (get-in @db [:cultures]))
+      :on-dispose #(do (re-frame/dispatch [:cleanup [:cultures]]))))))
+
+(re-frame/register-sub
  :selected-species-id
  (fn [db [_]]
-   (reaction (get @db :selected-species-id nil))))
+   (reaction (get @db :selected-species-id))))
+
+(re-frame/register-sub
+ :selected-culture-id
+ (fn [db [_]]
+   (reaction (get @db :selected-culture-id))))
 
 (re-frame/register-sub
  :project-filter
  (fn [db [_]]
-   (let [species-id    (re-frame/subscribe [:selected-species-id])]
-     (reaction (into {} (filter (comp some? val) (hash-map :speciesId @species-id)))))))
+   (let [culture-id    (re-frame/subscribe [:selected-culture-id])]
+     (reaction (into {} (filter (comp some? val) (hash-map :cultureId @culture-id)))))))
 
 (re-frame/register-sub
  :selected-species
@@ -54,12 +70,27 @@
      (reaction (map #(hash-map :id (get % "_id"), :label (get % "commonName"), :key (get % "_id")) @species-list)))))
 
 (re-frame/register-sub
+ :ui-cultures
+ (fn [db [_]]
+   (let [culture-list  (re-frame/subscribe [:cultures])]
+     (reaction (map #(hash-map :id (get % "_id"), :label (get % "name"), :key (get % "_id")) @culture-list)))))
+
+(re-frame/register-sub
+ :sub-dynamic
+ (fn sub-dynamic [_ _ [project-filter]]
+   (js/console.log "Calling")
+   (let [q (do
+             (GET "/api/extendedProjects" {:handler (fn [project-response] (re-frame/dispatch [:project-response (map #(into {:key (:_id %)} %) (keywordize-keys (js->clj project-response)))]))
+                                           :headers [:Authorization "Basic dGVzdEBteWNvdHJhY2suY29tOnRlc3Q="]
+                                           :params project-filter}))]
+     (reaction q))))
+
+(re-frame/register-sub
  :project-list
- (fn [db [_ type]]
-   (let  [project-filter (re-frame/subscribe [:project-filter])]
-     (make-reaction (fn [] ((js/console.log "Returning in the sub2")
-                             (js/console.log "1")
-                             (js/console.log project-filter)
-                             (js/console.log "2")
-                             (re-frame/dispatch [:update-project-list @project-filter])
-                             (:project-list @db)))))))
+ (fn [db [_]]
+   (let  [project-filter (re-frame/subscribe [:project-filter])
+          query-token (re-frame/subscribe [:sub-dynamic] [project-filter])]
+     (make-reaction (fn []
+                      (str @query-token)
+                      (js/console.log "Return project list")
+                      (:project-list @db))))))

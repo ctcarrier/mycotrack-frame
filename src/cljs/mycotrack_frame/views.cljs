@@ -22,29 +22,27 @@
 
 ;; forms  []
 (defn simple-dropdown []
-  (let [selected-species-id (reagent/atom nil)
-        species   (re-frame/subscribe [:ui-species])]
+  (let [selected-culture-id (reagent/atom nil)
+        cultures   (re-frame/subscribe [:ui-cultures])]
     (fn []
-      (js/console.log (clj->js @species))
+      (js/console.log (clj->js @cultures))
       [re-com/v-box
        :gap      "10px"
-       :children [[:p "Species Dropdown."]
+       :children [[:p "Culture Dropdown."]
                   [re-com/h-box
                    :gap      "10px"
                    :align    :center
                    :children [[re-com/single-dropdown
-                               :choices   @species
-                               :model     selected-species-id
+                               :choices   @cultures
+                               :model     selected-culture-id
                                :width     "300px"
-                               :on-change #((fn [] (reset! selected-species-id %)
-                                              (re-frame/dispatch [:set-selected-species %])))]
+                               :on-change #((fn [] (reset! selected-culture-id %)
+                                              (re-frame/dispatch [:set-selected-culture %])))]
                               [:div
-                               (js/console.log "Displaying selection")
-                               (js/console.log (clj->js @selected-species-id))
-                               [:strong "Selected species: "]
-                               (if (nil? @selected-species-id)
+                               [:strong "Selected culture: "]
+                               (if (nil? @selected-culture-id)
                                  "None"
-                                 (str (clj->js @selected-species-id)))]]]]])))
+                                 (str (clj->js @selected-culture-id)))]]]]])))
 
 
 ;; comps
@@ -62,27 +60,27 @@
 (defn project-list-comp []
   (let [project-list (re-frame/subscribe [:project-list])]
     (fn [] [:div.col-xs-12 [simple-dropdown]
-            [:table.table
-             [:thead
-              [:tr
-               [:th "Date Created"]
-               [:th "Count"]
-               [:th "Species"]
-               [:th "Culture"]
-               [:th "Description"]
-               ]]
-             [:tbody
-              (js/console.log "Project list:")
-              (js/console.log @project-list)
-              (if (nil? @project-list)
-                "Loading..."
+            (if (nil? @project-list)
+              "Loading..."
+              [:table.table
+               [:thead
+                [:tr
+                 [:th "Date Created"]
+                 [:th "Count"]
+                 [:th "Species"]
+                 [:th "Culture"]
+                 [:th "Description"]
+                 ]]
+               [:tbody
+                (js/console.log "Project list:")
+                (js/console.log @project-list)
                 (for [project @project-list]
                   [:tr
                    [:td (:createdDate project)]
                    [:td (:count project)]
                    [:td (-> project :species :commonName)]
                    [:td (-> project :culture :name)]
-                   [:td (:description project)]]))]]])))
+                   [:td (:description project)]])]])])))
 
 (defn species-detail-comp []
   (let [selected-species (re-frame/subscribe [:selected-species])]

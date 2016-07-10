@@ -27,10 +27,22 @@
    (assoc db :species species)))
 
 (re-frame/register-handler
+ :cultures-response
+ standard-middlewares
+ (fn [db [_ cultures]]
+   (assoc db :cultures cultures)))
+
+(re-frame/register-handler
  :set-selected-species
  standard-middlewares
  (fn [db [_ species-id]]
    (assoc db :selected-species-id species-id)))
+
+(re-frame/register-handler
+ :set-selected-culture
+ standard-middlewares
+ (fn [db [_ culture-id]]
+   (assoc db :selected-culture-id culture-id)))
 
 (re-frame/register-handler
  :project-response

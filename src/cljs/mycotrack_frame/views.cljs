@@ -72,13 +72,17 @@
                [:th "Description"]
                ]]
              [:tbody
-              (for [project @project-list]
-                [:tr
-                 [:td (:createdDate project)]
-                 [:td (:count project)]
-                 [:td (-> project :species :commonName)]
-                 [:td (-> project :culture :name)]
-                 [:td (:description project)]])]]])))
+              (js/console.log "Project list:")
+              (js/console.log @project-list)
+              (if (nil? @project-list)
+                "Loading..."
+                (for [project @project-list]
+                  [:tr
+                   [:td (:createdDate project)]
+                   [:td (:count project)]
+                   [:td (-> project :species :commonName)]
+                   [:td (-> project :culture :name)]
+                   [:td (:description project)]]))]]])))
 
 (defn species-detail-comp []
   (let [selected-species (re-frame/subscribe [:selected-species])]

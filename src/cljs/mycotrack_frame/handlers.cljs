@@ -1,8 +1,13 @@
 (ns mycotrack-frame.handlers
     (:require [re-frame.core :as re-frame :refer [debug dispatch]]
-              [mycotrack-frame.db :as db]))
+              [mycotrack-frame.db :as db]
+              [ajax.core :refer [GET POST]]
+              [clojure.walk :refer [keywordize-keys]]))
 
 (def standard-middlewares  [debug])
+
+(defn handle-project-http-event [project-response]
+  (re-frame/dispatch [:project-response (map #(into {:key (:_id %)} %) (keywordize-keys (js->clj project-response)))]))
 
 (re-frame/register-handler
  :initialize-db
@@ -38,3 +43,14 @@
  standard-middlewares
  (fn [db [_ key]]
    (dissoc db key)))
+
+(re-frame/register-handler
+ :update-project-list
+ standard-middlewares
+ (fn [db [_ project-filter]]
+   (js/console.log "UPdate project")
+   (js/console.log project-filter)
+   (GET "/api/extendedProjects" {:handler handle-project-http-event
+                                 :headers [:Authorization "Basic dGVzdEBteWNvdHJhY2suY29tOnRlc3Q="]
+                                 :params project-filter})
+   db))

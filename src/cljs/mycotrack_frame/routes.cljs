@@ -33,5 +33,8 @@
     (js/console.log "SPecies page")
     (re-frame/dispatch [:set-active-panel :species-list-panel]))
 
+  (defroute "/new-batch" []
+    (re-frame/dispatch [:set-active-panel :new-project-panel]))
+
   ;; --------------------
   (hook-browser-navigation!))

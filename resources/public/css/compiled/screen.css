@@ -1,7 +1,46 @@
 body {
-  color: red;
+  color: black;
 }
 
 .level1 {
-  color: green;
+  color: black;
+}
+
+.table-hover tbody tr:hover > td {
+  cursor: pointer;
+}
+
+ul.topnav {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+}
+
+ul.topnav li {
+  float: left;
+}
+
+ul.topnav li a {
+  display: inline-block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  transition: 0.3s;
+  font-size: 1.25em;
+}
+
+ul.topnav li a:hover {
+  background-color: #111;
+}
+
+ul.topnav li a.brand {
+  font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+  font-size: 1.75em;
+}
+
+ul.topnav li.icon {
+  display: none;
 }

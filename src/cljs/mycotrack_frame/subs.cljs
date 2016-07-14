@@ -27,8 +27,7 @@
  (fn [db [_ type]]
    (let  [query-token (GET "/api/species" {:handler handle-species-http-event})]
      (make-reaction
-      (fn [] (get-in @db [:species]))
-      :on-dispose #(do (re-frame/dispatch [:cleanup [:species]]))))))
+      (fn [] (get-in @db [:species]))))))
 
 (re-frame/register-sub
  :cultures
@@ -37,8 +36,16 @@
                                             :handler (fn [cultures-response] (re-frame/dispatch [:cultures-response (js->clj cultures-response)]))
                                             :headers [:Authorization "Basic dGVzdEBteWNvdHJhY2suY29tOnRlc3Q="]})]
      (make-reaction
-      (fn [] (get-in @db [:cultures]))
-      :on-dispose #(do (re-frame/dispatch [:cleanup [:cultures]]))))))
+      (fn [] (get-in @db [:cultures]))))))
+
+(re-frame/register-sub
+ :farm
+ (fn [db [_ type]]
+   (let  [query-token (GET "/api/farms" {
+                                            :handler (fn [farm-response] (re-frame/dispatch [:farm-response (js->clj farm-response)]))
+                                            :headers [:Authorization "Basic dGVzdEBteWNvdHJhY2suY29tOnRlc3Q="]})]
+     (make-reaction
+      (fn [] (get-in @db [:farm]))))))
 
 (re-frame/register-sub
  :selected-species-id
@@ -49,6 +56,11 @@
  :selected-culture-id
  (fn [db [_]]
    (reaction (get @db :selected-culture-id))))
+
+(re-frame/register-sub
+ :selected-container-id
+ (fn [db [_]]
+   (reaction (get @db :selected-container-id))))
 
 (re-frame/register-sub
  :project-filter
@@ -74,6 +86,18 @@
  (fn [db [_]]
    (let [culture-list  (re-frame/subscribe [:cultures])]
      (reaction (map #(hash-map :id (get % "_id"), :label (get % "name"), :key (get % "_id")) @culture-list)))))
+
+(re-frame/register-sub
+ :ui-containers
+ (fn [db [_]]
+   (let [farm  (re-frame/subscribe [:farm])]
+     (reaction (map #(hash-map :id (get % "_id"), :label (get % "name"), :key (get % "_id")) (get @farm "containers"))))))
+
+(re-frame/register-sub
+ :ui-substrate
+ (fn [db [_]]
+   (let [farm  (re-frame/subscribe [:farm])]
+     (reaction (map #(hash-map :id (get % "_id"), :label (get % "name"), :key (get % "_id")) (get @farm "substrates"))))))
 
 (re-frame/register-sub
  :sub-dynamic

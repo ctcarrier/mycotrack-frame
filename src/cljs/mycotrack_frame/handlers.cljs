@@ -1,8 +1,9 @@
 (ns mycotrack-frame.handlers
-    (:require [re-frame.core :as re-frame :refer [debug dispatch]]
-              [mycotrack-frame.db :as db]
-              [ajax.core :refer [GET POST]]
-              [clojure.walk :refer [keywordize-keys]]))
+  (:require [re-frame.core :as re-frame :refer [debug dispatch]]
+            [secretary.core :as secretary]
+            [mycotrack-frame.db :as db]
+            [ajax.core :refer [GET POST]]
+            [clojure.walk :refer [keywordize-keys]]))
 
 (def standard-middlewares  [debug])
 
@@ -18,6 +19,9 @@
  :set-active-panel
  (fn [db [_ active-panel & remaining]]
    (dispatch (into [] remaining))
+   (js/console.log active-panel)
+   (js/console.log "DB vvv")
+   (js/console.log db)
    (assoc db :active-panel active-panel)))
 
 (re-frame/register-handler
@@ -31,6 +35,12 @@
  standard-middlewares
  (fn [db [_ cultures]]
    (assoc db :cultures cultures)))
+
+(re-frame/register-handler
+ :farm-response
+ standard-middlewares
+ (fn [db [_ farm]]
+   (assoc db :farm farm)))
 
 (re-frame/register-handler
  :set-selected-species
@@ -54,15 +64,30 @@
  :cleanup
  standard-middlewares
  (fn [db [_ key]]
+   (js/console.log key)
    (dissoc db key)))
 
 (re-frame/register-handler
  :update-project-list
  standard-middlewares
  (fn [db [_ project-filter]]
-   (js/console.log "UPdate project")
-   (js/console.log project-filter)
    (GET "/api/extendedProjects" {:handler handle-project-http-event
                                  :headers [:Authorization "Basic dGVzdEBteWNvdHJhY2suY29tOnRlc3Q="]
                                  :params project-filter})
    db))
+
+(re-frame/register-handler
+ :save-new-project
+ standard-middlewares
+ (fn [db [_ project]]
+   (POST "/api/projects"
+         {:params project
+          :handler (fn [a, b, c]  ;;(swap! (:project-list db) conj project)
+                     (js/console.log "All 3 vvv")
+                     (js/console.log db)
+                     (secretary/dispatch! "/"))
+          :headers [:Authorization "Basic dGVzdEBteWNvdHJhY2suY29tOnRlc3Q="]
+          :error-handler #((js/console.log "Error saving project"))
+          :format :json
+          :response-format :json
+          :keywords? true})))

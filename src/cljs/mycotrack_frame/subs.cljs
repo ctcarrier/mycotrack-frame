@@ -58,6 +58,11 @@
    (reaction (get @db :selected-culture-id))))
 
 (re-frame/register-sub
+ :selected-location-id
+ (fn [db [_]]
+   (reaction (get @db :selected-location-id))))
+
+(re-frame/register-sub
  :selected-container-id
  (fn [db [_]]
    (reaction (get @db :selected-container-id))))
@@ -65,8 +70,9 @@
 (re-frame/register-sub
  :project-filter
  (fn [db [_]]
-   (let [culture-id    (re-frame/subscribe [:selected-culture-id])]
-     (reaction (into {} (filter (comp some? val) (hash-map :cultureId @culture-id)))))))
+   (let [culture-id    (re-frame/subscribe [:selected-culture-id])
+         location-id    (re-frame/subscribe [:selected-location-id])]
+     (reaction (into {} (filter (comp some? val) (hash-map :cultureId @culture-id, :locationId @location-id)))))))
 
 (re-frame/register-sub
  :selected-species
@@ -98,6 +104,17 @@
  (fn [db [_]]
    (let [farm  (re-frame/subscribe [:farm])]
      (reaction (map #(hash-map :id (get % "_id"), :label (get % "name"), :key (get % "_id")) (get @farm "substrates"))))))
+
+(re-frame/register-sub
+ :ui-locations
+ (fn [db [_]]
+   (let [farm  (re-frame/subscribe [:farm])]
+     (reaction (map #(hash-map :id (get % "_id"), :label (get % "name"), :key (get % "_id")) (get @farm "locations"))))))
+
+(re-frame/register-sub
+ :db-debug
+ (fn [db [_]]
+   (reaction @db)))
 
 (re-frame/register-sub
  :sub-dynamic

@@ -17,9 +17,9 @@
    :class "Brand"])
 
 (defn link-to-new-project-page []
-  [re-com/hyperlink-href
-   :label "New +"
-   :href "#/new-batch"])
+  [:div
+   [:a.btn.btn-primary.hidden-xs {:href "#/new-batch"} "New Batch"]
+   [:a.btn.btn-primary.visible-xs-block {:href "#/new-batch"} "New +"]])
 
 (defn link-to-about-page []
   [re-com/hyperlink-href
@@ -37,7 +37,7 @@
                    :gap      "10px"
                    :align    :center
                    :children [[re-com/single-dropdown
-                               :choices   @models
+                               :choices   (cons {:id nil :label "none" :key "none"} @models)
                                :model     @selected-id
                                :width     "300px"
                                :on-change on-change]]]]])))
@@ -58,19 +58,21 @@
    :on-change        #(reset! model %)
    :change-on-blur?  "true"])
 
-(defn save-project-button [desc count selected-culture-id selected-container-id selected-substrate-id]
+(defn save-project-button [desc count selected-culture-id selected-container-id selected-substrate-id selected-location-id]
   [re-com/button
    :label            "New Batch"
    :tooltip          "Create a new batch"
    :tooltip-position :below-center
-   :on-click          (fn [] (re-frame/dispatch [:save-new-project
-                                                 {
-                                                  :description @desc,
-                                                  :count @count,
-                                                  :cultureId @selected-culture-id,
-                                                  :container @selected-container-id
-                                                  :enabled true
-                                                  :substrate @selected-substrate-id}]))
+   :on-click          (fn [] (re-frame/dispatch
+                              [:save-new-project
+                               {
+                                :description @desc,
+                                :count @count,
+                                :cultureId @selected-culture-id,
+                                :container @selected-container-id
+                                :enabled true
+                                :substrate @selected-substrate-id
+                                :locationId @selected-location-id}]))
    :class             "btn-primary"])
 
 (defn new-project-form []
@@ -78,13 +80,15 @@
         count (reagent/atom "")
         selected-container-id (reagent/atom nil)
         selected-culture-id (reagent/atom nil)
-        selected-substrate-id (reagent/atom nil)]
+        selected-substrate-id (reagent/atom nil)
+        selected-location-id (reagent/atom nil)]
     (fn []  [:div [description-input-text desc]
              [number-input-text count]
              [dropdown :ui-cultures selected-culture-id #((fn [] (reset! selected-culture-id %)))]
              [dropdown :ui-containers selected-container-id #((fn [] (reset! selected-container-id %)))]
              [dropdown :ui-substrate selected-substrate-id #((fn [] (reset! selected-substrate-id %)))]
-             [save-project-button desc count selected-culture-id selected-container-id selected-substrate-id]])))
+             [dropdown :ui-locations selected-location-id #((fn [] (reset! selected-location-id %)))]
+             [save-project-button desc count selected-culture-id selected-container-id selected-substrate-id selected-location-id]])))
 
 ;; comps
 
@@ -104,7 +108,8 @@
 (defn navbar []
   [:ul.topnav
    [:li [link-to-home-page]]
-   [:li [link-to-about-page]]])
+   [:li [link-to-about-page]]
+   [:li [link-to-new-project-page]]])
 
 (defn project-list-rows [project-list]
   (if (nil? @project-list)
@@ -112,37 +117,49 @@
     [:table.table.table-striped.table-hover
        [:thead
         [:tr
-         [:th "Date Created"]
-         [:th "Count"]
-         [:th "Species"]
-         [:th "Culture"]
-         [:th "Description"]
+         [:th {:key "1"} "Date Created"]
+         [:th {:key "2"} "Culture"]
+         [:th {:key "3"} "Location"]
+         [:th {:key "4"} "Count"]
          ]]
        [:tbody
         (if (nil? @project-list)
           "Loading..."
           (for [project @project-list]
-            [:tr
-             [:td [:a {:href (str "#/batches/" (:_id project))} (:createdDate project)]]
-             [:td [:a {:href (str "#/batches/" (:_id project))} (:count project)]]
-             [:td [:a {:href (str "#/batches/" (:_id project))} (-> project :species :commonName)]]
-             [:td [:a {:href (str "#/batches/" (:_id project))} (-> project :culture :name)]]
-             [:td [:a {:href (str "#/batches/" (:_id project))} (:description project)]]]))]]))
+            [:tr {:key (:_id project)}
+             [:td {:key (str (:_id project) "_cd")} [:a {:href (str "#/batches/" (:_id project))} (:createdDate project)]]
+             [:td {:key (str (:_id project) "_cn")} [:a {:href (str "#/batches/" (:_id project))} (-> project :culture :name)]]
+             [:td {:key (str (:_id project) "_ln")}[:a {:href (str "#/batches/" (:_id project))} (-> project :location :name)]]
+             [:td {:key (str (:_id project) "ct")} [:a {:href (str "#/batches/" (:_id project))} (:count project)]]]))]]))
 
 (defn project-list-comp []
   (let [project-list (re-frame/subscribe [:project-list])
-        selected-culture-id (reagent/atom nil)]
-    (fn [] [:div.col-xs-12
-            [dropdown :ui-cultures selected-culture-id #((fn [] (reset! selected-culture-id %)
-                                                      (re-frame/dispatch [:set-selected-culture %])))]
-            (project-list-rows project-list)])))
+        selected-culture-id (reagent/atom nil)
+        selected-location-id (reagent/atom nil)]
+    (fn []
+      [:div.col-xs-12.pad-bottom [:div.row
+             [:div.col-xs-3.col-md-1 [re-com/label :label "Species:"]]
+             [:div.col-xs-9.col-md-11 [dropdown
+                             :ui-cultures
+                             selected-culture-id
+                             (fn [res]
+                               (reset! selected-culture-id res)
+                               (re-frame/dispatch [:set-selected-culture res]))]]]
+       [:div.row
+        [:div.col-xs-3.col-md-1 [re-com/label :label "Location:"]]
+        [:div.col-xs-9.col-md-11 [dropdown
+                        :ui-locations
+                        selected-location-id
+                        (fn [res] (reset! selected-location-id res)
+                          (re-frame/dispatch [:set-selected-location res]))]]]
+       [:div.row [:div.col-xs-12(project-list-rows project-list)]]])))
 
 (defn species-detail-comp []
   (let [selected-species (re-frame/subscribe [:selected-species])]
-    (fn [] :div.col-xs-12.pad-top
-      [:p (get @selected-species "commonName")]
-      [:p (get @selected-species "scientificName")]
-      [:img {:src (get @selected-species "imageUrl")}])))
+    (fn [] [:div.col-xs-12.pad-top
+            [:p (get @selected-species "commonName")]
+            [:p (get @selected-species "scientificName")]
+            [:img {:src (get @selected-species "imageUrl")}]])))
 
 ;; home
 
@@ -154,9 +171,13 @@
        :level :level1])))
 
 (defn home-panel []
-  [re-com/v-box
-   :gap "1em"
-   :children [[home-title] [link-to-new-project-page] [project-list-comp]]])
+  [:div.col-xs-12
+   [:div.row
+    [:div.col-xs-3
+     [home-title]]]
+   [:div.row
+    [:div.col-xs-12
+     [project-list-comp]]]])
 
 ;; about
 
@@ -219,7 +240,7 @@
 (defn main-panel []
   (let [active-panel (re-frame/subscribe [:active-panel])]
     (fn []
-      [re-com/v-box
-       :height "100%"
-       :children [[navbar]
-                  (panels @active-panel)]])))
+      [:container-fluid
+       [:div.col-xs-12
+        [navbar]
+        (panels @active-panel)]])))

@@ -6,6 +6,18 @@ body {
   color: black;
 }
 
+.pad-bottom {
+  padding-bottom: 200px;
+}
+
+.pad-top {
+  padding-top: 20px;
+}
+
+.right {
+  float: right;
+}
+
 .table-hover tbody tr:hover > td {
   cursor: pointer;
 }
@@ -16,6 +28,10 @@ ul.topnav {
   padding: 0;
   overflow: hidden;
   background-color: #333;
+}
+
+ul.topnav li:last-child {
+  float: right;
 }
 
 ul.topnav li {
@@ -43,4 +59,17 @@ ul.topnav li a.brand {
 
 ul.topnav li.icon {
   display: none;
+}
+
+@media (max-width: 978px) {
+
+  .container {
+    padding: 0;
+    margin: 0;
+  }
+  
+  .body {
+    padding: 0;
+  }
+
 }

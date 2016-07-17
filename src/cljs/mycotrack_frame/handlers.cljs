@@ -5,7 +5,7 @@
             [ajax.core :refer [GET POST]]
             [clojure.walk :refer [keywordize-keys]]))
 
-(def standard-middlewares  [debug])
+(def standard-middlewares  [])
 
 (defn handle-project-http-event [project-response]
   (re-frame/dispatch [:project-response (map #(into {:key (:_id %)} %) (keywordize-keys (js->clj project-response)))]))
@@ -18,10 +18,10 @@
 (re-frame/register-handler
  :set-active-panel
  (fn [db [_ active-panel & remaining]]
-   (dispatch (into [] remaining))
-   (js/console.log active-panel)
    (js/console.log "DB vvv")
    (js/console.log db)
+   (js/console.log active-panel)
+   (dispatch (into [] remaining))
    (assoc db :active-panel active-panel)))
 
 (re-frame/register-handler
@@ -55,6 +55,12 @@
    (assoc db :selected-culture-id culture-id)))
 
 (re-frame/register-handler
+ :set-selected-location
+ standard-middlewares
+ (fn [db [_ location-id]]
+   (assoc db :selected-location-id location-id)))
+
+(re-frame/register-handler
  :project-response
  standard-middlewares
  (fn [db [_ project-list]]
@@ -80,14 +86,18 @@
  :save-new-project
  standard-middlewares
  (fn [db [_ project]]
+
    (POST "/api/projects"
          {:params project
           :handler (fn [a, b, c]  ;;(swap! (:project-list db) conj project)
                      (js/console.log "All 3 vvv")
                      (js/console.log db)
-                     (secretary/dispatch! "/"))
+                     ;; (secretary/dispatch! "/")
+                     (.assign js/location "#/")
+                     )
           :headers [:Authorization "Basic dGVzdEBteWNvdHJhY2suY29tOnRlc3Q="]
           :error-handler #((js/console.log "Error saving project"))
           :format :json
           :response-format :json
-          :keywords? true})))
+          :keywords? true})
+   db))

@@ -58,6 +58,20 @@
    (reaction (get @db :selected-culture-id))))
 
 (re-frame/register-sub
+ :selected-culture
+ (fn [db [_]]
+   (let [selected-culture-id (re-frame/subscribe [:selected-culture-id])
+         ui-cultures (re-frame/subscribe [:ui-cultures])]
+     (reaction (find-first #(= (:key %) @selected-culture-id) @ui-cultures)))))
+
+(re-frame/register-sub
+ :selected-location
+ (fn [db [_]]
+   (let [selected-location-id (re-frame/subscribe [:selected-location-id])
+         ui-locations (re-frame/subscribe [:ui-locations])]
+     (reaction (find-first #(= (:key %) @selected-location-id) @ui-locations)))))
+
+(re-frame/register-sub
  :selected-location-id
  (fn [db [_]]
    (reaction (get @db :selected-location-id))))

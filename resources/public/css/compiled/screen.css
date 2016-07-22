@@ -10,6 +10,22 @@ body {
   padding-bottom: 200px;
 }
 
+.pad-bottom-sm {
+  padding-bottom: 50px;
+}
+
+.pad-bottom-xs {
+  padding-bottom: 15px;
+}
+
+.background-light {
+  background-color: #f2f2f2;
+}
+
+.border-light {
+  border-bottom: 1px solid grey;
+}
+
 .pad-top {
   padding-top: 20px;
 }

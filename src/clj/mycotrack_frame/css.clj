@@ -8,6 +8,10 @@
   [:body {:color "black"}]
   [:.level1 {:color "black"}]
   [:.pad-bottom {:padding-bottom (px 200)}]
+  [:.pad-bottom-sm {:padding-bottom (px 50)}]
+  [:.pad-bottom-xs {:padding-bottom (px 15)}]
+  [:.background-light {:background-color "#f2f2f2"}]
+  [:.border-light {:border-bottom "1px solid grey"}]
   [:.pad-top {:padding-top (px 20)}]
   [:.right {:float "right"}]
   [:.table-hover

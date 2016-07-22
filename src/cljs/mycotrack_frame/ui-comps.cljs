@@ -34,7 +34,7 @@
    :change-on-blur?  "true"])
 
 (defn loading-comp []
-  "Loading")
+  [re-com/throbber :size :large])
 
 (defn navbar []
   [:ul.topnav

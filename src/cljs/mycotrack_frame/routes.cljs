@@ -36,5 +36,8 @@
   (defroute "/new-batch" []
     (re-frame/dispatch [:set-active-panel :new-project-panel]))
 
+  (defroute "/login" []
+    (re-frame/dispatch [:set-active-panel :auth-panel]))
+
   ;; --------------------
   (hook-browser-navigation!))

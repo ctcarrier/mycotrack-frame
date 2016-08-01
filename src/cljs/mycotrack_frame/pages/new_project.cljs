@@ -28,7 +28,7 @@
         selected-culture-id (reagent/atom nil)
         selected-substrate-id (reagent/atom nil)
         selected-location-id (reagent/atom nil)]
-    (fn []  [:div [description-input-text desc]
+    (fn []  [:div [description-input-text desc "Description"]
              [number-input-text count]
              [dropdown :ui-cultures selected-culture-id #((fn [] (reset! selected-culture-id %)))]
              [dropdown :ui-containers selected-container-id #((fn [] (reset! selected-container-id %)))]

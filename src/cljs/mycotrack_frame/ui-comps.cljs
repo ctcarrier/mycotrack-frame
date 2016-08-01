@@ -17,13 +17,14 @@
                                :width     "300px"
                                :on-change on-change]]]]])))
 
-(defn description-input-text [desc]
-  [re-com/input-text
-   :model            @desc
-   :width            "300px"
-   :placeholder      "Enter description"
-   :on-change        #(reset! desc %)
-   :change-on-blur?  "true"])
+(defn description-input-text [desc placeholder]
+  [:input.form-control {:type "text" :placeholder placeholder :value @desc :on-change #(reset! desc (-> % .-target .-value))}])
+
+(defn password-input-text [desc placeholder]
+  [:input.form-control {:type "password" :placeholder placeholder :value @desc :on-change #(reset! desc (-> % .-target .-value))}])
+
+(defn email-input-text [desc placeholder]
+  [:input.form-control {:type "email" :placeholder placeholder :value @desc :on-change #(reset! desc (-> % .-target .-value))}])
 
 (defn number-input-text [model]
   [re-com/input-text

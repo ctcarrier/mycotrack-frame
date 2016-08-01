@@ -2,6 +2,7 @@
   (:require [re-frame.core :as re-frame :refer [debug dispatch]]
             [secretary.core :as secretary]
             [mycotrack-frame.db :as db]
+            [mycotrack-frame.http-utils :refer [GET-SECURE POST-SECURE]]
             [ajax.core :refer [GET POST]]
             [clojure.walk :refer [keywordize-keys]]))
 
@@ -9,6 +10,9 @@
 
 (defn handle-project-http-event [project-response]
   (re-frame/dispatch [:project-response (map #(into {:key (:_id %)} %) (keywordize-keys (js->clj project-response)))]))
+
+(defn handle-auth-http-event [auth-response]
+  )
 
 (re-frame/register-handler
  :initialize-db
@@ -23,6 +27,25 @@
    (js/console.log active-panel)
    (dispatch (into [] remaining))
    (assoc db :active-panel active-panel)))
+
+(re-frame/register-handler
+ :set-auth-token
+ (fn [db [_ auth-token]]
+   (GET "/api/users" {:handler #(re-frame/dispatch [:auth-success])
+                      :error-handler #(re-frame/dispatch [:auth-failure])
+                                 :headers [:Authorization (str "Basic " auth-token)]})
+   (assoc db :auth-status :pending :auth-token (str "Basic " auth-token))))
+
+(re-frame/register-handler
+ :auth-success
+ (fn [db [_ auth-token]]
+   (.assign js/location "#/")
+   (assoc db :auth-status :success)))
+
+(re-frame/register-handler
+ :auth-failure
+ (fn [db [_ auth-token]]
+   (assoc db :auth-status :fail :auth-token nil)))
 
 (re-frame/register-handler
  :species-response
@@ -77,8 +100,7 @@
  :update-project-list
  standard-middlewares
  (fn [db [_ project-filter]]
-   (GET "/api/extendedProjects" {:handler handle-project-http-event
-                                 :headers [:Authorization "Basic dGVzdEBteWNvdHJhY2suY29tOnRlc3Q="]
+   (GET-SECURE "/api/extendedProjects" {:handler handle-project-http-event
                                  :params project-filter})
    db))
 
@@ -86,17 +108,13 @@
  :save-new-project
  standard-middlewares
  (fn [db [_ project]]
-
-   (POST "/api/projects"
+   (POST-SECURE "/api/projects"
          {:params project
           :handler (fn [a, b, c]  ;;(swap! (:project-list db) conj project)
                      (js/console.log "All 3 vvv")
                      (js/console.log db)
                      ;; (secretary/dispatch! "/")
-                     (.assign js/location "#/")
-                     )
-          :headers [:Authorization "Basic dGVzdEBteWNvdHJhY2suY29tOnRlc3Q="]
-          :error-handler #((js/console.log "Error saving project"))
+                     (.assign js/location "#/"))
           :format :json
           :response-format :json
           :keywords? true})

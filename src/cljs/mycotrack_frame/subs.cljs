@@ -2,7 +2,7 @@
     (:require-macros [reagent.ratom :refer [reaction]])
     (:require [re-frame.core :as re-frame]
               [reagent.ratom :refer [make-reaction]]
-              [ajax.core :refer [GET POST]]
+              [mycotrack-frame.http-utils :refer [GET-SECURE POST-SECURE]]
               [clojure.walk :refer [keywordize-keys]]))
 
 (defn find-first
@@ -25,25 +25,23 @@
 (re-frame/register-sub
  :species
  (fn [db [_ type]]
-   (let  [query-token (GET "/api/species" {:handler handle-species-http-event})]
+   (let  [query-token (GET-SECURE "/api/species" {:handler handle-species-http-event})]
      (make-reaction
       (fn [] (get-in @db [:species]))))))
 
 (re-frame/register-sub
  :cultures
  (fn [db [_ type]]
-   (let  [query-token (GET "/api/cultures" {
-                                            :handler (fn [cultures-response] (re-frame/dispatch [:cultures-response (js->clj cultures-response)]))
-                                            :headers [:Authorization "Basic dGVzdEBteWNvdHJhY2suY29tOnRlc3Q="]})]
+   (let  [query-token (GET-SECURE "/api/cultures" {
+                                            :handler (fn [cultures-response] (re-frame/dispatch [:cultures-response (js->clj cultures-response)]))})]
      (make-reaction
       (fn [] (get-in @db [:cultures]))))))
 
 (re-frame/register-sub
  :farm
  (fn [db [_ type]]
-   (let  [query-token (GET "/api/farms" {
-                                            :handler (fn [farm-response] (re-frame/dispatch [:farm-response (js->clj farm-response)]))
-                                            :headers [:Authorization "Basic dGVzdEBteWNvdHJhY2suY29tOnRlc3Q="]})]
+   (let  [query-token (GET-SECURE "/api/farms" {
+                                            :handler (fn [farm-response] (re-frame/dispatch [:farm-response (js->clj farm-response)]))})]
      (make-reaction
       (fn [] (get-in @db [:farm]))))))
 
@@ -135,9 +133,8 @@
  (fn sub-dynamic [_ _ [project-filter]]
    (js/console.log "Calling")
    (let [q (do
-             (GET "/api/extendedProjects" {:handler (fn [project-response] (re-frame/dispatch [:project-response (map #(into {:key (:_id %)} %) (keywordize-keys (js->clj project-response)))]))
-                                           :headers [:Authorization "Basic dGVzdEBteWNvdHJhY2suY29tOnRlc3Q="]
-                                           :params project-filter}))]
+             (GET-SECURE "/api/extendedProjects" {:handler (fn [project-response] (re-frame/dispatch [:project-response (map #(into {:key (:_id %)} %) (keywordize-keys (js->clj project-response)))]))
+                                                  :params project-filter}))]
      (reaction q))))
 
 (re-frame/register-sub
@@ -149,3 +146,13 @@
                       (str @query-token)
                       (js/console.log "Return project list")
                       (:project-list @db))))))
+
+(re-frame/register-sub
+ :auth-token
+ (fn [db [_]]
+   (reaction (get @db :auth-token))))
+
+(re-frame/register-sub
+ :auth-status
+ (fn [db [_]]
+   (reaction (get @db :auth-status))))

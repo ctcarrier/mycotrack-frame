@@ -6,7 +6,8 @@
                  [re-com "0.8.0"]
                  [secretary "1.2.3"]
                  [garden "1.3.2"]
-                 [cljs-ajax "0.5.8"]]
+                 [cljs-ajax "0.5.8"]
+                 [alandipert/storage-atom "2.0.1"]]
 
   :min-lein-version "2.5.3"
 

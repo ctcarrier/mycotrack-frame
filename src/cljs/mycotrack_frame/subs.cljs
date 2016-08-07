@@ -2,7 +2,7 @@
     (:require-macros [reagent.ratom :refer [reaction]])
     (:require [re-frame.core :as re-frame]
               [reagent.ratom :refer [make-reaction]]
-              [mycotrack-frame.http-utils :refer [GET-SECURE POST-SECURE]]
+              [mycotrack-frame.httputils :refer [GET-SECURE POST-SECURE]]
               [clojure.walk :refer [keywordize-keys]]))
 
 (defn find-first

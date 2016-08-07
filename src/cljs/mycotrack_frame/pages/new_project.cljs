@@ -2,7 +2,7 @@
   (:require [re-com.core :as re-com]
             [re-frame.core :as re-frame]
             [reagent.core    :as    reagent]
-            [mycotrack-frame.ui-comps :refer [number-input-text description-input-text dropdown]]))
+            [mycotrack-frame.uicomps :refer [number-input-text description-input-text dropdown]]))
 
 (defn save-project-button [desc count selected-culture-id selected-container-id selected-substrate-id selected-location-id]
   [re-com/button

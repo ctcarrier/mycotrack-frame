@@ -8,7 +8,7 @@
               [mycotrack-frame.pages.species-detail :refer [species-detail-panel]]
               [mycotrack-frame.pages.new-project :refer [new-project-panel]]
               [mycotrack-frame.pages.auth :refer [auth-panel]]
-              [mycotrack-frame.ui-comps :refer [navbar]]))
+              [mycotrack-frame.uicomps :refer [navbar]]))
 
 
 (defmulti panels identity)

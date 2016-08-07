@@ -1,4 +1,4 @@
-(ns mycotrack-frame.ui-comps
+(ns mycotrack-frame.uicomps
   (:require [mycotrack-frame.links :refer [link-to-home-page link-to-about-page link-to-new-project-page]]
             [re-com.core :as re-com]
             [re-frame.core :as re-frame]))

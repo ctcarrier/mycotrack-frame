@@ -1,4 +1,4 @@
-lein do clean, ring uberjar
-scp target/mycotrack-reagent.jar root@162.243.65.130:/usr/local/jar
-ssh root@162.243.65.130 'service mycotrack-reagent stop'
-ssh root@162.243.65.130 'service mycotrack-reagent start'
+lein do clean, garden once, uberjar
+scp target/mycotrack-frame.jar root@ocean:/usr/local/jar/mycotrack-frame.jar
+ssh root@ocean 'service mycotrack-frame stop'
+ssh root@ocean 'service mycotrack-frame start'

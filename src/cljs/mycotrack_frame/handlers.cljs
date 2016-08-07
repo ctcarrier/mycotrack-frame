@@ -2,7 +2,7 @@
   (:require [re-frame.core :as re-frame :refer [debug dispatch]]
             [secretary.core :as secretary]
             [mycotrack-frame.db :as db]
-            [mycotrack-frame.http-utils :refer [GET-SECURE POST-SECURE]]
+            [mycotrack-frame.httputils :refer [GET-SECURE POST-SECURE]]
             [ajax.core :refer [GET POST]]
             [clojure.walk :refer [keywordize-keys]]))
 

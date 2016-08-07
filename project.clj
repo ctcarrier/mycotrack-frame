@@ -7,7 +7,9 @@
                  [secretary "1.2.3"]
                  [garden "1.3.2"]
                  [cljs-ajax "0.5.8"]
-                 [alandipert/storage-atom "2.0.1"]]
+                 [alandipert/storage-atom "2.0.1"]
+                 [compojure "1.5.0"]
+                 [ring "1.4.0"]]
 
   :min-lein-version "2.5.3"
 
@@ -22,7 +24,8 @@
                                     "test/js"
                                     "resources/public/css/compiled"]
 
-  :figwheel {:css-dirs ["resources/public/css"]}
+  :figwheel {:css-dirs ["resources/public/css"]
+             :ring-handler mycotrack-frame.handler/dev-handler}
 
   :garden {:builds [{:id "screen"
                      :source-paths ["src/clj"]
@@ -30,7 +33,10 @@
                      :compiler {:output-to "resources/public/css/compiled/screen.css"
                                 :pretty-print? true}}]}
 
-    :cljsbuild {:builds [{:id "dev"
+  :uberjar-name "mycotrack-frame.jar"
+  :auto-clean false
+
+  :cljsbuild {:builds [{:id "dev"
                         :source-paths ["src/cljs"]
                         :figwheel {:on-jsload "mycotrack-frame.core/mount-root"}
                         :compiler {:main mycotrack-frame.core
@@ -47,8 +53,17 @@
 
                        {:id "min"
                         :source-paths ["src/cljs"]
+                        :jar true
                         :compiler {:main mycotrack-frame.core
                                    :output-to "resources/public/js/compiled/app.js"
                                    :optimizations :advanced
                                    :closure-defines {goog.DEBUG false}
-                                   :pretty-print false}}]})
+                                   :pretty-print false}}]}
+  :main mycotrack-frame.server
+
+  :aot [mycotrack-frame.server]
+
+  :prep-tasks [["cljsbuild" "once" "min"] "compile"]
+
+  :aliases
+  {"package" ["do" "clean" ["garden" "once"] "uberjar"]})

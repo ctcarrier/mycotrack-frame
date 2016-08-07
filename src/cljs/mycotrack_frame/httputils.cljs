@@ -1,4 +1,4 @@
-(ns mycotrack-frame.http-utils
+(ns mycotrack-frame.httputils
   (:require [re-com.core :as re-com]
             [re-frame.core :as re-frame]
             [ajax.core :refer [GET POST]]))

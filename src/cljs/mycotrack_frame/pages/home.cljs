@@ -2,7 +2,7 @@
   (:require [re-frame.core :as re-frame]
               [re-com.core :as re-com]
               [reagent.core    :as    reagent]
-              [mycotrack-frame.ui-comps :refer [loading-comp dropdown]]))
+              [mycotrack-frame.uicomps :refer [loading-comp dropdown]]))
 
 (defn project-list-rows [project-list]
   (if (nil? @project-list)

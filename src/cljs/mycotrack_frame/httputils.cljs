@@ -21,5 +21,5 @@
 
 (defn POST-SECURE [url params]
   (let [auth-token (re-frame/subscribe [:auth-token])]
-    (let [params-with-auth (update-params params auth-token)]
+    (let [params-with-auth (update-params params @auth-token)]
          (POST url params-with-auth))))

@@ -23,13 +23,13 @@
 
 (defn new-project-form []
   (let [desc (reagent/atom "")
-        count (reagent/atom "")
+        count (reagent/atom 1)
         selected-container-id (reagent/atom nil)
         selected-culture-id (reagent/atom nil)
         selected-substrate-id (reagent/atom nil)
         selected-location-id (reagent/atom nil)]
-    (fn []  [:div [description-input-text desc "Description"]
-             [number-input-text count]
+    (fn []  [:div.col-md-3.col-xs-12 [description-input-text desc "Description"]
+             [number-input-text count "Count"]
              [dropdown :ui-cultures selected-culture-id #((fn [] (reset! selected-culture-id %)))]
              [dropdown :ui-containers selected-container-id #((fn [] (reset! selected-container-id %)))]
              [dropdown :ui-substrate selected-substrate-id #((fn [] (reset! selected-substrate-id %)))]

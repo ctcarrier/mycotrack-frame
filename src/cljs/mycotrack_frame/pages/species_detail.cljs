@@ -8,7 +8,7 @@
     (fn [] [:div.col-xs-12.pad-top
             [:p (get @selected-species "commonName")]
             [:p (get @selected-species "scientificName")]
-            [:img {:src (get @selected-species "imageUrl")}]])))
+            [:img {:src (get @selected-species "imageUrl") :title (get @selected-species "imageAttribution")}]])))
 
 (defn species-detail-title []
   [re-com/title

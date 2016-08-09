@@ -11,7 +11,7 @@
                                         [:p (get species "commonName")]
                                         [:p (get species "scientificName")]
                                         [:div {:key (get species "_id")}
-                                         [:img {:src (get species "imageUrl")}]]]])])))
+                                         [:img {:src (get species "imageUrl") :title (get species "imageAttribution")}]]]])])))
 
 (defn species-list-title []
   [re-com/title

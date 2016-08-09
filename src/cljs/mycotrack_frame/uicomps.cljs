@@ -26,13 +26,11 @@
 (defn email-input-text [desc placeholder]
   [:input.form-control {:type "email" :placeholder placeholder :value @desc :on-change #(reset! desc (-> % .-target .-value))}])
 
-(defn number-input-text [model]
-  [re-com/input-text
-   :model            @model
-   :width            "300px"
-   :placeholder      "Enter number"
-   :on-change        #(reset! model %)
-   :change-on-blur?  "true"])
+(defn parse-int [s]
+    (js/parseInt s))
+
+(defn number-input-text [model placeholder]
+  [:input.form-control {:type "number" :placeholder placeholder :value @model :on-change #(reset! model (parse-int (-> % .-target .-value)))}])
 
 (defn loading-comp []
   [re-com/throbber :size :large])

@@ -103,7 +103,7 @@
  :ui-cultures
  (fn [db [_]]
    (let [culture-list  (re-frame/subscribe [:cultures])]
-     (reaction (map #(hash-map :id (get % "_id"), :label (get % "name"), :key (get % "_id")) @culture-list)))))
+     (reaction (map #(hash-map :id (get % "_id"), :label (str (get % "name") "(" (get (get % "species") "commonName") ")"), :key (get % "_id")) @culture-list)))))
 
 (re-frame/register-sub
  :ui-containers

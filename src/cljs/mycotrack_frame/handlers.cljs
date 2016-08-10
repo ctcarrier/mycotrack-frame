@@ -72,6 +72,12 @@
    (assoc db :selected-species-id species-id)))
 
 (re-frame/register-handler
+ :set-selected-project
+ standard-middlewares
+ (fn [db [_ project-id]]
+   (assoc db :selected-project-id project-id)))
+
+(re-frame/register-handler
  :set-selected-culture
  standard-middlewares
  (fn [db [_ culture-id]]

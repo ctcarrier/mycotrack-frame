@@ -29,6 +29,9 @@
     (js/console.log id)
     (re-frame/dispatch [:set-active-panel :species-detail-panel :set-selected-species id]))
 
+  (defroute "/batches/:id" [id]
+    (re-frame/dispatch [:set-active-panel :project-detail-panel :set-selected-project id]))
+
   (defroute "/species" []
     (js/console.log "SPecies page")
     (re-frame/dispatch [:set-active-panel :species-list-panel]))

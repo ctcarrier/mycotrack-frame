@@ -51,6 +51,11 @@
    (reaction (get @db :selected-species-id))))
 
 (re-frame/register-sub
+ :selected-project-id
+ (fn [db [_]]
+   (reaction (get @db :selected-project-id))))
+
+(re-frame/register-sub
  :selected-culture-id
  (fn [db [_]]
    (reaction (get @db :selected-culture-id))))
@@ -89,9 +94,18 @@
 (re-frame/register-sub
  :selected-species
  (fn [db [_]]
-   (let [species-id    (reaction (get-in @db [:selected-species-id]))
-         species-list  (reaction (get-in @db [:species]))]
+   (let [species-id    (re-frame/subscribe [:selected-species-id])
+         species-list  (re-frame/subscribe [:species])]
      (reaction (find-first #(= (get % "_id") @species-id) @species-list)))))
+
+(re-frame/register-sub
+ :selected-project
+ (fn [db [_]]
+   (let [project-id (re-frame/subscribe [:selected-project-id])
+         project-list (re-frame/subscribe [:project-list])]
+     (js/console.log (str "Project detail for id: " @project-id))
+     (js/console.log (str "With list: " @project-list))
+     (reaction (find-first #(= (:_id %) @project-id) @project-list)))))
 
 (re-frame/register-sub
  :ui-species

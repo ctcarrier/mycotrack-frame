@@ -14,6 +14,7 @@
   [:.border-light {:border-bottom "1px solid grey"}]
   [:.pad-top {:padding-top (px 20)}]
   [:.right {:float "right"}]
+  [:.max200 {"max-width" (px 200)}]
   [:.table-hover
    [:tbody
     [(> :tr:hover :td) {:cursor "pointer"}]]]

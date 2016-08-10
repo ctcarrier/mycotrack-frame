@@ -17,11 +17,11 @@
          ]]
        [:tbody
         (for [project @project-list]
-          [:tr {:key (:_id project)}
-           [:td {:key (str (:_id project) "_cd")} [:a {:href (str "#/batches/" (:_id project))} (:createdDate project)]]
-           [:td {:key (str (:_id project) "_cn")} [:a {:href (str "#/batches/" (:_id project))} (-> project :culture :name)]]
-           [:td {:key (str (:_id project) "_ln")}[:a {:href (str "#/batches/" (:_id project))} (-> project :location :name)]]
-           [:td {:key (str (:_id project) "ct")} [:a {:href (str "#/batches/" (:_id project))} (:count project)]]])]]))
+          [:tr {:key (:_id project) :on-click #(.assign js/location (str "#/batches/" (:_id project)))}
+           [:td {:key (str (:_id project) "_cd")} (:createdDate project)]
+           [:td {:key (str (:_id project) "_cn")} (-> project :culture :name)]
+           [:td {:key (str (:_id project) "_ln")} (-> project :location :name)]
+           [:td {:key (str (:_id project) "ct")} (:count project)]])]]))
 
 (defn culture-filter-comp [switch]
   (let [culture-list (re-frame/subscribe [:ui-cultures])]

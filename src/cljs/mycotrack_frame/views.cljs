@@ -8,6 +8,8 @@
               [mycotrack-frame.pages.species-detail :refer [species-detail-panel]]
               [mycotrack-frame.pages.project-detail :refer [project-detail-panel]]
               [mycotrack-frame.pages.new-project :refer [new-project-panel]]
+              [mycotrack-frame.pages.new-species :refer [new-species-panel]]
+              [mycotrack-frame.pages.new-culture :refer [new-culture-panel]]
               [mycotrack-frame.pages.auth :refer [auth-panel]]
               [mycotrack-frame.uicomps :refer [navbar]]))
 
@@ -19,6 +21,8 @@
 (defmethod panels :species-detail-panel [] [species-detail-panel])
 (defmethod panels :project-detail-panel [] [project-detail-panel])
 (defmethod panels :new-project-panel [] [new-project-panel])
+(defmethod panels :new-species-panel [] [new-species-panel])
+(defmethod panels :new-culture-panel [] [new-culture-panel])
 (defmethod panels :auth-panel [] [auth-panel])
 (defmethod panels :default [] [:div])
 

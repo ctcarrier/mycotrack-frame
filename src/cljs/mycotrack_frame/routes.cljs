@@ -39,6 +39,12 @@
   (defroute "/new-batch" []
     (re-frame/dispatch [:set-active-panel :new-project-panel]))
 
+  (defroute "/new-species" []
+    (re-frame/dispatch [:set-active-panel :new-species-panel]))
+
+  (defroute "/new-culture" []
+    (re-frame/dispatch [:set-active-panel :new-culture-panel]))
+
   (defroute "/login" []
     (re-frame/dispatch [:set-active-panel :auth-panel]))
 

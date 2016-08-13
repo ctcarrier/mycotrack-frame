@@ -2,26 +2,33 @@
   (:require [re-frame.core :as re-frame]
               [re-com.core :as re-com]
               [reagent.core    :as    reagent]
-              [mycotrack-frame.uicomps :refer [loading-comp dropdown]]))
+              [mycotrack-frame.uicomps :refer [loading-comp dropdown]]
+              [cljsjs.moment]))
+
+(defn formatted-date [date-string]
+  (.format (js/moment date-string "YYYY MM DD") "MM/DD/YY"))
+
+(defn handle-project-click [project]
+  (.assign js/location (str "#/batches/" (:_id project))))
 
 (defn project-list-rows [project-list]
   (if (nil? @project-list)
     [:div.col-xs-offset-5.col-xs-1 (loading-comp)]
     [:table.table.table-striped.table-hover
        [:thead
-        [:tr
-         [:th {:key "1"} "Date Created"]
+        [:tr.hidden-xs
+         [:th {:key "1"} "Created"]
          [:th {:key "2"} "Culture"]
          [:th {:key "3"} "Location"]
          [:th {:key "4"} "Count"]
          ]]
        [:tbody
         (for [project @project-list]
-          [:tr {:key (:_id project) :on-click #(.assign js/location (str "#/batches/" (:_id project)))}
-           [:td {:key (str (:_id project) "_cd")} (:createdDate project)]
+          [:tr {:key (:_id project) :on-click #(handle-project-click project) :on-touch-start #(handle-project-click project)}
+           [:td {:key (str (:_id project) "_cd")} (formatted-date (:createdDate project))]
            [:td {:key (str (:_id project) "_cn")} (-> project :culture :name)]
            [:td {:key (str (:_id project) "_ln")} (-> project :location :name)]
-           [:td {:key (str (:_id project) "ct")} (:count project)]])]]))
+           [:td.hidden-xs {:key (str (:_id project) "ct")} (:count project)]])]]))
 
 (defn culture-filter-comp [switch]
   (let [culture-list (re-frame/subscribe [:ui-cultures])]

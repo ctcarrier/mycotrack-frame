@@ -9,7 +9,8 @@
                  [cljs-ajax "0.5.8"]
                  [alandipert/storage-atom "2.0.1"]
                  [compojure "1.5.0"]
-                 [ring "1.4.0"]]
+                 [ring "1.4.0"]
+                 [cljsjs/moment "2.10.6-4"]]
 
   :min-lein-version "2.5.3"
 

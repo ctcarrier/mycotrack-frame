@@ -125,3 +125,29 @@
           :response-format :json
           :keywords? true})
    db))
+
+(re-frame/register-handler
+ :save-new-species
+ standard-middlewares
+ (fn [db [_ species]]
+   (POST-SECURE "/api/species"
+         {:params species
+          :handler (fn []
+                     (.assign js/location "#/"))
+          :format :json
+          :response-format :json
+          :keywords? true})
+   db))
+
+(re-frame/register-handler
+ :save-new-culture
+ standard-middlewares
+ (fn [db [_ culture]]
+   (POST-SECURE "/api/cultures"
+         {:params culture
+          :handler (fn []
+                     (.assign js/location "#/"))
+          :format :json
+          :response-format :json
+          :keywords? true})
+   db))

@@ -15,6 +15,11 @@
   [:.pad-top {:padding-top (px 20)}]
   [:.right {:float "right"}]
   [:.max200 {"max-width" (px 200)}]
+  [:.disabled
+   {
+    :opacity: 0.65
+    :cursor: "not-allowed"
+    }]
   [:.table-hover
    [:tbody
     [(> :tr:hover :td) {:cursor "pointer"}]]]
@@ -46,5 +51,4 @@
    [:li.icon {:display "none"}]]
   (at-media {:max-width (px 978)}
             [:.container {:padding 0 :margin 0}]
-            [:.body {:padding 0}])
-  )
+            [:.body {:padding 0}]))

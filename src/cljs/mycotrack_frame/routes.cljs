@@ -29,6 +29,15 @@
     (js/console.log id)
     (re-frame/dispatch [:set-active-panel :species-detail-panel :set-selected-species id]))
 
+  (defroute "/batches/:id/spawn" [id]
+    (re-frame/dispatch [:set-active-panel :spawn-project-panel :set-selected-project id]))
+
+  (defroute "/batches/:id/move" [id]
+    (re-frame/dispatch [:set-active-panel :move-project-panel :set-selected-project id]))
+
+  (defroute "/batches/:id/contam" [id]
+    (re-frame/dispatch [:set-active-panel :contam-project-panel :set-selected-project id]))
+
   (defroute "/batches/:id" [id]
     (re-frame/dispatch [:set-active-panel :project-detail-panel :set-selected-project id]))
 

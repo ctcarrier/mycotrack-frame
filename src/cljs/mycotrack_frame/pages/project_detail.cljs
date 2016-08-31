@@ -1,6 +1,6 @@
 (ns mycotrack-frame.pages.project-detail
   (:require [re-com.core :as re-com]
-            [mycotrack-frame.links :refer [link-to-home-page]]
+            [mycotrack-frame.links :refer [link-to-home-page link-to-spawn-page link-to-move-page link-to-contam-page]]
             [re-frame.core :as re-frame]))
 
 (defn culture-link [culture]
@@ -15,7 +15,10 @@
             [:div.col-md-6.col-xs-12
              [:div.col-xs-12
               [:h4.pad-bottom-xs (str (:count @selected-project) " " (-> @selected-project :container :name) " of ") (culture-link (@selected-project :culture))]
-              [:h4.pad-bottom-xs (str "Created " (:createdDate @selected-project))]              ]
+              [:h4.pad-bottom-xs (str "Created " (:createdDate @selected-project))]]
+             [:div.col-xs-12.pad-bottom-xs (link-to-spawn-page (:_id @selected-project))]
+             [:div.col-xs-12.pad-bottom-xs (link-to-contam-page (:_id @selected-project))]
+             [:div.col-xs-12 (link-to-move-page (:_id @selected-project))]
              [:div.col-xs-12 [:h3.border-light "Notes"]
               [:p (:description @selected-project)]]]
             [:div.col-md-6.col-xs-12 (species-link (:species @selected-project))]])))

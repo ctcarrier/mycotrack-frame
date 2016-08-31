@@ -7,33 +7,26 @@
             [mycotrack-frame.webstorage :as webstorage]))
 
 (defn auth-button [email password]
-  [re-com/button
-   :label            "Login"
-   :tooltip          "Login"
-   :tooltip-position :below-center
-   :on-click          (fn []
-                        (webstorage/set-item! :login-email @email)
-                        (re-frame/dispatch
-                              [:set-auth-token
-                               (b64/encodeString (str @email ":" @password))]))
-   :class             "btn-primary"])
+  [:button.btn.btn-primary.input-lg.col-xs-12 {:label "Login" :type "submit" :tooltip "Login"
+                                               :on-click (fn [e]
+                                                           (.preventDefault e)
+                                                           (webstorage/set-item! :login-email @email)
+                                                           (re-frame/dispatch
+                                                            [:set-auth-token
+                                                             (b64/encodeString (str @email ":" @password))]))} "Login"])
 
 (defn auth-form []
   (let [email (reagent/atom (webstorage/get-item :login-email))
         password (reagent/atom "")]
-    (fn []  [:div.col-xs-12.col-md-3 [email-input-text email "Email"]
-             [password-input-text password "Password"]
-             [auth-button email password]])))
-
-(defn page-title []
-  [re-com/title
-   :label "Login"
-   :level :level1])
+    (fn []  [:form.col-xs-12.col-md-4.col-md-offset-4
+             [:h2.text-center "Login"]
+             [:div.col-xs-12.pad-bottom-xs [email-input-text email "Email"]]
+             [:div.col-xs-12.pad-bottom-xs [password-input-text password "Password"]]
+             [:div.col-xs-12 [auth-button email password]]])))
 
 (defn auth-panel []
   (let [auth-status (re-frame/subscribe [:auth-status])]
     [:div.col-xs-12
-     [:div.row [page-title]]
      [:div.row (if (= @auth-status :pending)
                  [loading-comp]
                  [auth-form])]]))

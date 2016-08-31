@@ -21,3 +21,12 @@
   [re-com/hyperlink-href
    :label "About"
    :href "#/about"])
+
+(defn link-to-spawn-page [id]
+  [:a.btn.btn-success.input-lg.col-xs-12.col-md-3 {:href (str "#/batches/" id "/spawn")} "Spawn >"])
+
+(defn link-to-contam-page [id]
+  [:a.btn.btn-warning.input-lg.col-xs-12.col-md-3 {:href (str "#/batches/" id "/contam")} "Contamination >"])
+
+(defn link-to-move-page [id]
+  [:a.btn.btn-info.input-lg.col-xs-12.col-md-3 {:href (str "#/batches/" id "/move")} "Move >"])

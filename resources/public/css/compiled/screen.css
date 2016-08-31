@@ -44,7 +44,8 @@ body {
 
 ul.topnav {
   list-style-type: none;
-  margin: 0;
+  margin-left: 15px;
+  margin-right: 15px;
   padding: 0;
   overflow: hidden;
   background-color: #333;
@@ -79,6 +80,10 @@ ul.topnav li a.brand {
 
 ul.topnav li.icon {
   display: none;
+}
+
+select:invalid {
+  color: #999;
 }
 
 @media (max-width: 978px) {

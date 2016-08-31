@@ -10,7 +10,8 @@
                  [alandipert/storage-atom "2.0.1"]
                  [compojure "1.5.0"]
                  [ring "1.4.0"]
-                 [cljsjs/moment "2.10.6-4"]]
+                 [cljsjs/moment "2.10.6-4"]
+                 [cljs-pikaday "0.1.3"]]
 
   :min-lein-version "2.5.3"
 

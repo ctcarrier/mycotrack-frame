@@ -127,6 +127,19 @@
    db))
 
 (re-frame/register-handler
+ :spawn-project
+ standard-middlewares
+ (fn [db [_ parent-id project]]
+   (POST-SECURE (str "/api/extendedProjects/" parent-id "/children")
+         {:params project
+          :handler (fn [a, b, c]
+                     (.assign js/location "#/"))
+          :format :json
+          :response-format :json
+          :keywords? true})
+   db))
+
+(re-frame/register-handler
  :save-new-species
  standard-middlewares
  (fn [db [_ species]]

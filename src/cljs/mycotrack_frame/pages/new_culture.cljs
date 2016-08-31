@@ -21,7 +21,7 @@
         selected-species-id (reagent/atom nil)]
     (fn []  [:div.col-md-3.col-xs-12
              [description-input-text name "Name"]
-             [dropdown :ui-species selected-species-id #((fn [] (reset! selected-species-id %)))]
+             [dropdown :ui-species selected-species-id "Species:" #((fn [] (reset! selected-species-id (-> % .-target .-value))))]
              [save-culture-button name selected-species-id]])))
 
 (defn new-culture-title []

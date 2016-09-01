@@ -4,7 +4,8 @@
             [mycotrack-frame.db :as db]
             [mycotrack-frame.httputils :refer [GET-SECURE POST-SECURE]]
             [ajax.core :refer [GET POST]]
-            [clojure.walk :refer [keywordize-keys]]))
+            [clojure.walk :refer [keywordize-keys]]
+            [mycotrack-frame.webstorage :as webstorage]))
 
 (def standard-middlewares  [])
 
@@ -40,11 +41,13 @@
  :auth-success
  (fn [db [_ auth-token]]
    (.assign js/location "#/")
+   (webstorage/set-item! :auth-token auth-token)
    (assoc db :auth-status :success)))
 
 (re-frame/register-handler
  :auth-failure
  (fn [db [_ auth-token]]
+   (webstorage/remove-item! :auth-token)
    (assoc db :auth-status :fail :auth-token nil)))
 
 (re-frame/register-handler

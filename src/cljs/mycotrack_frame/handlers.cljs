@@ -34,14 +34,14 @@
  (fn [db [_ auth-token]]
    (GET "/api/users" {:handler #(re-frame/dispatch [:auth-success])
                       :error-handler #(re-frame/dispatch [:auth-failure])
-                                 :headers [:Authorization (str "Basic " auth-token)]})
+                      :headers [:Authorization (str "Basic " auth-token)]})
+   (webstorage/set-item! :auth-token (str "Basic " auth-token))
    (assoc db :auth-status :pending :auth-token (str "Basic " auth-token))))
 
 (re-frame/register-handler
  :auth-success
  (fn [db [_ auth-token]]
    (.assign js/location "#/")
-   (webstorage/set-item! :auth-token auth-token)
    (assoc db :auth-status :success)))
 
 (re-frame/register-handler

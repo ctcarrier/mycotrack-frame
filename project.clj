@@ -11,7 +11,8 @@
                  [compojure "1.5.0"]
                  [ring "1.4.0"]
                  [cljsjs/moment "2.10.6-4"]
-                 [reagent-utils "0.2.0"]]
+                 [reagent-utils "0.2.0"]
+                 [com.andrewmcveigh/cljs-time "0.4.0"]]
 
   :min-lein-version "2.5.3"
 

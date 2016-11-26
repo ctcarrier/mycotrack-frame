@@ -46,6 +46,14 @@
       (fn [] (get-in @db [:farm]))))))
 
 (re-frame/register-sub
+ :events
+ (fn [db [_ type]]
+   (let  [query-token (GET-SECURE "/api/farms" {
+                                            :handler (fn [farm-response] (re-frame/dispatch [:farm-response (js->clj farm-response)]))})]
+     (make-reaction
+      (fn [] (get-in @db [:farm]))))))
+
+(re-frame/register-sub
  :selected-species-id
  (fn [db [_]]
    (reaction (get @db :selected-species-id))))
@@ -53,7 +61,7 @@
 (re-frame/register-sub
  :selected-project-id
  (fn [db [_]]
-   (reaction (get @db :selected-project-id))))
+   (reaction (:selected-project-id @db))))
 
 (re-frame/register-sub
  :selected-culture-id

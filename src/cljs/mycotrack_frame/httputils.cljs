@@ -16,7 +16,6 @@
 (defn GET-SECURE [url params]
   (let [auth-token (re-frame/subscribe [:auth-token])]
     (let [params-with-auth (update-params params @auth-token)]
-      (js/console.log (str "Params " params-with-auth))
       (GET url params-with-auth))))
 
 (defn POST-SECURE [url params]

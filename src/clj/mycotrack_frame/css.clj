@@ -15,13 +15,15 @@
   [:.pad-top {:padding-top (px 20)}]
   [:.right {:float "right"}]
   [:.max200 {"max-width" (px 200)}]
+  [:.contaminated {:color "red"}]
   [:.table-hover
    [:tbody
     [(> :tr:hover :td) {:cursor "pointer"}]]]
   [:ul.topnav
    {
     :list-style-type "none"
-    :margin 0
+    :margin-left (px 15)
+    :margin-right (px 15)
     :padding 0
     :overflow "hidden"
     :background-color "#333"}
@@ -44,6 +46,7 @@
       :font-family "\"Palatino Linotype\", \"Book Antiqua\", Palatino, serif"
       :font-size (em 1.75)}]]
    [:li.icon {:display "none"}]]
+  [:select:invalid {:color "#999"}]
   (at-media {:max-width (px 978)}
             [:.container {:padding 0 :margin 0}]
             [:.body {:padding 0}])

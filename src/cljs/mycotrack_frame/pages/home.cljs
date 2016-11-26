@@ -15,20 +15,22 @@
   (if (nil? @project-list)
     [:div.col-xs-offset-5.col-xs-1 (loading-comp)]
     [:table.table.table-striped.table-hover
-       [:thead
-        [:tr.hidden-xs
-         [:th {:key "1"} "Created"]
-         [:th {:key "2"} "Culture"]
-         [:th {:key "3"} "Location"]
-         [:th {:key "4"} "Count"]
-         ]]
-       [:tbody
-        (for [project @project-list]
-          [:tr {:key (:_id project) :on-click #(handle-project-click project) :on-touch-start #(handle-project-click project)}
-           [:td {:key (str (:_id project) "_cd")} (formatted-date (:createdDate project))]
-           [:td {:key (str (:_id project) "_cn")} (-> project :culture :name)]
-           [:td {:key (str (:_id project) "_ln")} (-> project :location :name)]
-           [:td.hidden-xs {:key (str (:_id project) "ct")} (:count project)]])]]))
+     [:thead
+      [:tr.hidden-xs
+       [:th {:key "1"} "Created"]
+       [:th {:key "2"} "Culture"]
+       [:th.hidden-xs {:key "5"} "Substrate"]
+       [:th {:key "3"} "Location"]
+       [:th.hidden-xs {:key "4"} "Count"]
+       ]]
+     [:tbody
+      (for [project @project-list]
+        [:tr {:key (:_id project) :on-click #(handle-project-click project) :on-tap #(handle-project-click project) :class (when (true? (:contaminated project)) "contaminated")}
+         [:td {:key (str (:_id project) "_cd")} (formatted-date (:createdDate project))]
+         [:td {:key (str (:_id project) "_cn")} (-> project :culture :name)]
+         [:td.hidden-xs {:key (str (:_id project) "_sn")} (-> project :substrate :name)]
+         [:td {:key (str (:_id project) "_ln")} (-> project :location :name)]
+         [:td.hidden-xs {:key (str (:_id project) "ct")} (:count project)]])]]))
 
 (defn culture-filter-comp [switch]
   (let [culture-list (re-frame/subscribe [:ui-cultures])]

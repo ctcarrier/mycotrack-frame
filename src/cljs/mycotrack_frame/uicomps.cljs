@@ -1,5 +1,5 @@
 (ns mycotrack-frame.uicomps
-  (:require [mycotrack-frame.links :refer [link-to-home-page link-to-about-page link-to-new-project-page]]
+  (:require [mycotrack-frame.links :refer [link-to-home-page link-to-about-page link-to-new-project-page link-to-aggregate-page]]
             [re-com.core :as re-com]
             [re-frame.core :as re-frame]
             [cljs-time.core :as time :refer [date-time now]]
@@ -36,9 +36,11 @@
   [:ul.topnav
    [:li [link-to-home-page]]
    [:li [link-to-about-page]]
+   [:li [link-to-aggregate-page]]
    [:li [link-to-new-project-page]]])
 
 (def date-formatter (formatter "MM-dd-YYYY"))
+(def day-month-formatter (formatter "MM-dd"))
 (def iso-formatter (formatters :date-time))
 
 (defn date-input-text [model placeholder]

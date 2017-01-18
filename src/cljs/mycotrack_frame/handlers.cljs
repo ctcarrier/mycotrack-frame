@@ -10,6 +10,7 @@
 (def standard-middlewares  [])
 
 (defn handle-project-http-event [project-response]
+  (js/console.log "PRoject response<<<<<<<<<<<")
   (re-frame/dispatch [:project-response (map #(into {:key (:_id %)} %) (keywordize-keys (js->clj project-response)))]))
 
 (defn handle-auth-http-event [auth-response]
@@ -69,6 +70,12 @@
    (assoc db :farm farm)))
 
 (re-frame/register-handler
+ :aggregate-response
+ standard-middlewares
+ (fn [db [_ aggregate]]
+   (assoc db :aggregate aggregate)))
+
+(re-frame/register-handler
  :set-selected-species
  standard-middlewares
  (fn [db [_ species-id]]
@@ -96,6 +103,7 @@
  :project-response
  standard-middlewares
  (fn [db [_ project-list]]
+   (js/console.log "Settings project list")
    (assoc db :project-list project-list)))
 
 (re-frame/register-handler
@@ -140,6 +148,19 @@
           :format :json
           :response-format :json
           :keywords? true})
+   db))
+
+(re-frame/register-handler
+ :retire-project
+ standard-middlewares
+ (fn [db [_ project]]
+   (POST-SECURE (str "/api/extendedProjects/" (:_id project) "/children")
+                {:params project
+                 :handler (fn []
+                            (.assign js/location "#/")                     )
+                 :format :json
+                 :response-format :json
+                 :keywords? true})
    db))
 
 (re-frame/register-handler

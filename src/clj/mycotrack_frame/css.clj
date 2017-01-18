@@ -13,9 +13,18 @@
   [:.background-light {:background-color "#f2f2f2"}]
   [:.border-light {:border-bottom "1px solid grey"}]
   [:.pad-top {:padding-top (px 20)}]
+  [:.pad-top-xs {:padding-top (px 15)}]
   [:.right {:float "right"}]
   [:.max200 {"max-width" (px 200)}]
   [:.contaminated {:color "red"}]
+  [:.bold-panel
+   {
+    :font-size (em 1.5)}
+   [:h3
+    {
+     :text-align "center"
+     :background-color "#7c3400"
+     :color "white"}]]
   [:.table-hover
    [:tbody
     [(> :tr:hover :td) {:cursor "pointer"}]]]

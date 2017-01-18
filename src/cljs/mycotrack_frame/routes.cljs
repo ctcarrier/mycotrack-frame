@@ -57,5 +57,8 @@
   (defroute "/login" []
     (re-frame/dispatch [:set-active-panel :auth-panel]))
 
+  (defroute "/aggregate" []
+    (re-frame/dispatch [:set-active-panel :aggregate-panel]))
+
   ;; --------------------
   (hook-browser-navigation!))

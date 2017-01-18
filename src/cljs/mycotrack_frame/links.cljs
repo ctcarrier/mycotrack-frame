@@ -1,5 +1,6 @@
 (ns mycotrack-frame.links
-  (:require [re-com.core :as re-com]))
+  (:require [re-com.core :as re-com]
+            [re-frame.core :as re-frame :refer [dispatch]]))
 
 (defn link-to-species-list-page []
   [re-com/hyperlink-href
@@ -22,7 +23,13 @@
    :label "About"
    :href "#/about"])
 
+(defn link-to-aggregate-page []
+  [re-com/hyperlink-href
+   :label "Farm Report"
+   :href "#/aggregate"])
+
 (defn link-to-spawn-page [id]
+  (js/console.log (str "ID: " id))
   [:a.btn.btn-success.input-lg.col-xs-12.col-md-3 {:href (str "#/batches/" id "/spawn")} "Spawn >"])
 
 (defn link-to-contam-page [id]

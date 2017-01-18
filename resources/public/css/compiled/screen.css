@@ -30,6 +30,10 @@ body {
   padding-top: 20px;
 }
 
+.pad-top-xs {
+  padding-top: 15px;
+}
+
 .right {
   float: right;
 }
@@ -40,6 +44,16 @@ body {
 
 .contaminated {
   color: red;
+}
+
+.bold-panel {
+  font-size: 1.5em;
+}
+
+.bold-panel h3 {
+  text-align: center;
+  background-color: #7c3400;
+  color: white;
 }
 
 .table-hover tbody tr:hover > td {

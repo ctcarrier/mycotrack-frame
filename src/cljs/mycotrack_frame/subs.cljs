@@ -46,6 +46,14 @@
       (fn [] (get-in @db [:farm]))))))
 
 (re-frame/register-sub
+ :aggregate
+ (fn [db [_ type]]
+   (let  [query-token (GET-SECURE "/api/aggregations/projects" {
+                                                                :handler (fn [response] (re-frame/dispatch [:aggregate-response (keywordize-keys (js->clj response))]))})]
+     (make-reaction
+      (fn [] (get-in @db [:aggregate]))))))
+
+(re-frame/register-sub
  :events
  (fn [db [_ type]]
    (let  [query-token (GET-SECURE "/api/farms" {
@@ -111,8 +119,6 @@
  (fn [db [_]]
    (let [project-id (re-frame/subscribe [:selected-project-id])
          project-list (re-frame/subscribe [:project-list])]
-     (js/console.log (str "Project detail for id: " @project-id))
-     (js/console.log (str "With list: " @project-list))
      (reaction (find-first #(= (:_id %) @project-id) @project-list)))))
 
 (re-frame/register-sub
@@ -166,7 +172,6 @@
           query-token (re-frame/subscribe [:sub-dynamic] [project-filter])]
      (make-reaction (fn []
                       (str @query-token)
-                      (js/console.log "Return project list")
                       (:project-list @db))))))
 
 (re-frame/register-sub

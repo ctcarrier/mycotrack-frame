@@ -59,4 +59,16 @@
   (at-media {:max-width (px 978)}
             [:.container {:padding 0 :margin 0}]
             [:.body {:padding 0}])
-  )
+  [:.horizon {:border-bottom "solid 1px #000" :overflow "hidden" :position "relative"}
+   [:canvas {:display "block"}]
+   [:.title :.value {:bottom 0 :line-height (px 30) :margin "0 6px" :position "absolute" :text-shadow "0 1px 0 rgba(255,255,255,.5)" :white-space "nowrap"}]
+   [:.title {:left 0}]
+   [:.value {:right 0}]
+   [:.line {:background "#000" :z-index 2}]]
+  [:.rule {:z-index 3}]
+  [:.axis {:font "10px sans-serif" :pointer-events "none" :z-index 2}
+   [:text {:-webkit-transition "fill-opacity 20ms linear"}]
+   [:path {:display "none"}]
+   [:line {:stroke "000" :shape-rendering "crispEdges"}]
+   ]
+  [:.line {:background "#000" :opacity ".2" :z-index 2}])

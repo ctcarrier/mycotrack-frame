@@ -60,5 +60,8 @@
   (defroute "/aggregate" []
     (re-frame/dispatch [:set-active-panel :aggregate-panel]))
 
+  (defroute "/graph" []
+    (re-frame/dispatch [:set-active-panel :graph-panel]))
+
   ;; --------------------
   (hook-browser-navigation!))

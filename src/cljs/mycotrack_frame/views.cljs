@@ -15,6 +15,7 @@
               [mycotrack-frame.pages.new-culture :refer [new-culture-panel]]
               [mycotrack-frame.pages.aggregate :refer [aggregate-panel]]
               [mycotrack-frame.pages.auth :refer [auth-panel]]
+              [mycotrack-frame.pages.graph :refer [graph-panel]]
               [mycotrack-frame.uicomps :refer [navbar]]))
 
 
@@ -32,6 +33,7 @@
 (defmethod panels :new-culture-panel [] [new-culture-panel])
 (defmethod panels :auth-panel [] [auth-panel])
 (defmethod panels :aggregate-panel [] [aggregate-panel])
+(defmethod panels :graph-panel [] [graph-panel])
 (defmethod panels :default [] [:div])
 
 (defn main-panel []

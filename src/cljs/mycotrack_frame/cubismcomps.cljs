@@ -7,19 +7,25 @@
    [cljs-time.core :as time :refer [date-time now]]
    [cljs-time.format :as format
     :refer [formatter formatters instant->map parse unparse]]
-   [mycotrack-frame.httputils :refer [GET-SECURE]]))
+   [mycotrack-frame.httputils :refer [GET-SECURE]]
+   [goog.string :as gstring]
+   [goog.string.format]))
 
 
 (def d3 js/d3)
 (def cubism js/cubism)
-(def context (.size (.step (.context cubism 960) (* 10 60 1000)) 1440))
-(def horizon (.height (.extent (.horizon context) (clj->js [50 100])) 100))
+(def context (.size (.step (.context cubism 960) (* 10 60 1000)) 1240))
+(def horizon (.height (.horizon context) 100))
 (def axis-format (.format d3 "%H:%M"))
-(def axis (.tickFormat (.axis context) axis-format))
+(def axis (.ticks (.axis context) 12))
 (def rule (.rule context))
 
-(defn handle-sensor-http-event [callback sensor-event]
-  (let [data (clj->js (map #(% "result") sensor-event))]
+(defn temp-to-fahrenheit [celcius] (gstring/format "%d" (+ (* celcius 1.8) 32)))
+
+(defn handle-sensor-http-event [callback convert-temp sensor-event]
+  (let [data (clj->js (if (true? convert-temp)
+                        (map #(temp-to-fahrenheit (% "result")) sensor-event)
+                        (map #(% "result") sensor-event)))]
     (js/console.log data)
     (callback (clj->js nil) data)))
 
@@ -32,18 +38,19 @@
 (defn time-as-seconds [date]
   (.getTime date))
 
-(defn sensor-data [start stop step callback]
-  (GET-SECURE (str "/api/sensorReadings?location=basement&metric=humidity&start=" (time-as-seconds start) "&end=" (time-as-seconds stop))
-              {:handler (partial handle-sensor-http-event callback)})
-  )
+(defn sensor-data [location metric convert-temp start stop step callback]
+  (GET-SECURE (str "/api/sensorReadings?location=" location "&metric=" metric "&start=" (time-as-seconds start) "&end=" (time-as-seconds stop))
+              {:handler (partial handle-sensor-http-event callback convert-temp)}))
+
+(def metric-to-data-source {"basement humidity" (partial sensor-data "basement" "humidity" false) "basement temperature" (partial sensor-data "basement" "temperature" true) "library temperature" (partial sensor-data "library" "temperature" true) "library lux" (partial sensor-data "library" "lux" false)})
 
 (defn mt-metric [name]
   (do
     (js/console.log "mt-metric")
-   (.metric context sensor-data name)))
+    (.metric context (get metric-to-data-source name) name)))
 
 (defn bind-graph []
-  (let [metrics (clj->js ["humidity"])]
+  (let [metrics (clj->js ["basement humidity", "basement temperature", "library temperature", "library lux"])]
     (js/console.log "Binding")
     (.metric horizon mt-metric)
     (-> d3

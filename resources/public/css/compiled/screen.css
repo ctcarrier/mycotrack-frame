@@ -138,10 +138,13 @@ select:invalid {
 
 .horizon .title {
   left: 0;
+  color: black;
+  font-size: 2em;
 }
 
 .horizon .value {
   right: 0;
+  font-size: 2em;
 }
 
 .horizon .line {

@@ -42,7 +42,6 @@
     (re-frame/dispatch [:set-active-panel :project-detail-panel :set-selected-project id]))
 
   (defroute "/species" []
-    (js/console.log "SPecies page")
     (re-frame/dispatch [:set-active-panel :species-list-panel]))
 
   (defroute "/new-batch" []
@@ -60,5 +59,10 @@
   (defroute "/aggregate" []
     (re-frame/dispatch [:set-active-panel :aggregate-panel]))
 
+  (defroute "/locations" []
+    (re-frame/dispatch [:set-active-panel :location-panel]))
+
+  (defroute "/locations/:id" [id]
+    (re-frame/dispatch [:set-active-panel :location-details-panel :set-selected-location id]))
   ;; --------------------
   (hook-browser-navigation!))

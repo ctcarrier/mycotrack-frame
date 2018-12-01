@@ -33,11 +33,14 @@
   [re-com/throbber :size :large])
 
 (defn navbar []
-  [:ul.topnav
-   [:li [link-to-home-page]]
-   [:li [link-to-about-page]]
-   [:li [link-to-aggregate-page]]
-   [:li [link-to-new-project-page]]])
+  [:div.navbar.navbar-expand-lg.navbar-light.bg-light.mb-5
+   [:button.navbar-toggler {:data-toggle "collapse" :data-target "#navbarSupportedContent" :aria-controls "navbarSupportedContent" :aria-expanded "false" :aria-label "Toggle navigation"}
+    [:span.navbar-toggler-icon]]
+   [:div.collapse.navbar-collapse {:id "navbarSupportedContent"}
+    [:ul.navbar-nav.mr-auto
+     [:li.nav-item [:a.nav-link {:href (link-to-home-page)} "Home"]]
+     [:li.nav-item [:a.nav-link {:href (link-to-about-page)} "About"]]
+     [:li.nav-item [:a.nav-link {:href (link-to-aggregate-page)} "Aggregations"]]]]])
 
 (def date-formatter (formatter "MM-dd-YYYY"))
 (def day-month-formatter (formatter "MM-dd"))

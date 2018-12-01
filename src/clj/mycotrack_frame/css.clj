@@ -56,6 +56,15 @@
       :font-size (em 1.75)}]]
    [:li.icon {:display "none"}]]
   [:select:invalid {:color "#999"}]
+  [:div.pane
+   {
+    :height (px 200)
+    :width (px 200)
+    :background-color "grey"}
+   [:&:hover
+    {
+     :background-color "blue"
+     :cursor "pointer"}]]
   (at-media {:max-width (px 978)}
             [:.container {:padding 0 :margin 0}]
             [:.body {:padding 0}])

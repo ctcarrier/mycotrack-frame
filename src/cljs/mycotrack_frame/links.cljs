@@ -8,10 +8,7 @@
    :href "#/species"])
 
 (defn link-to-home-page []
-  [re-com/hyperlink-href
-   :label "Mycotrack"
-   :href "#/"
-   :class "Brand"])
+  "#/")
 
 (defn link-to-new-project-page []
   [:div
@@ -19,14 +16,10 @@
    [:a.btn.btn-primary.visible-xs-block {:href "#/new-batch"} "New +"]])
 
 (defn link-to-about-page []
-  [re-com/hyperlink-href
-   :label "About"
-   :href "#/about"])
+  "#/about")
 
 (defn link-to-aggregate-page []
-  [re-com/hyperlink-href
-   :label "Farm Report"
-   :href "#/aggregate"])
+  "#/aggregate")
 
 (defn link-to-spawn-page [id]
   (js/console.log (str "ID: " id))

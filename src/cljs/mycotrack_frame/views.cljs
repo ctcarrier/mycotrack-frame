@@ -15,7 +15,9 @@
               [mycotrack-frame.pages.new-culture :refer [new-culture-panel]]
               [mycotrack-frame.pages.aggregate :refer [aggregate-panel]]
               [mycotrack-frame.pages.auth :refer [auth-panel]]
-              [mycotrack-frame.uicomps :refer [navbar]]))
+              [mycotrack-frame.uicomps :refer [navbar]]
+              [mycotrack-frame.pages.locations :refer [location-panel]]
+              [mycotrack-frame.pages.location-details :refer [location-details-panel]]))
 
 
 (defmulti panels identity)
@@ -32,12 +34,14 @@
 (defmethod panels :new-culture-panel [] [new-culture-panel])
 (defmethod panels :auth-panel [] [auth-panel])
 (defmethod panels :aggregate-panel [] [aggregate-panel])
+(defmethod panels :location-panel [] [location-panel])
+(defmethod panels :location-details-panel [] [location-details-panel])
 (defmethod panels :default [] [:div])
 
 (defn main-panel []
   (let [active-panel (re-frame/subscribe [:active-panel])]
     (fn []
-      [:container-fluid
+      [:div.container-fluid
+       [navbar]
        [:div.row
-        [navbar]
         (panels @active-panel)]])))

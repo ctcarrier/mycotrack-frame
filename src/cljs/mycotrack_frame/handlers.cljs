@@ -107,6 +107,21 @@
    (assoc db :project-list project-list)))
 
 (re-frame/register-handler
+ :locations-response
+ standard-middlewares
+ (fn [db [_ location-list]]
+   (js/console.log "Settings location list")
+   (js/console.log (nth location-list 2))
+   (assoc db :locations location-list)))
+
+(re-frame/register-handler
+ :location-settings-response
+ standard-middlewares
+ (fn [db [_ location-settings-list]]
+   (js/console.log "Setting settings")
+   (assoc db :location-settings location-settings-list)))
+
+(re-frame/register-handler
  :cleanup
  standard-middlewares
  (fn [db [_ key]]
@@ -119,6 +134,13 @@
  (fn [db [_ project-filter]]
    (GET-SECURE "/api/extendedProjects" {:handler handle-project-http-event
                                  :params project-filter})
+   db))
+
+(re-frame/register-handler
+ :update-location-list
+ standard-middlewares
+ (fn [db [_]]
+   (GET-SECURE "/api/locations" {:handler handle-location-http-event})
    db))
 
 (re-frame/register-handler

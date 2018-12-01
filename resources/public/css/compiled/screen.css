@@ -104,6 +104,17 @@ select:invalid {
   color: #999;
 }
 
+div.pane {
+  height: 200px;
+  width: 200px;
+  background-color: grey;
+}
+
+div.pane:hover {
+  background-color: blue;
+  cursor: pointer;
+}
+
 @media (max-width: 978px) {
 
   .container {

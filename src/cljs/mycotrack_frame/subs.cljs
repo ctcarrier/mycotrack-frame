@@ -37,6 +37,17 @@
      (make-reaction
       (fn [] (get-in @db [:cultures]))))))
 
+(defn handle-location-http-event [location-response]
+  (re-frame/dispatch [:locations-response (map #(into {:key (:_id %)} %) (keywordize-keys (js->clj location-response)))]))
+
+(re-frame/register-sub
+ :locations
+ (fn [db [_ type]]
+   (let  [query-token (GET-SECURE "/api/locations" {
+                                                    :handler handle-location-http-event})]
+     (make-reaction
+      (fn [] (get-in @db [:locations]))))))
+
 (re-frame/register-sub
  :farm
  (fn [db [_ type]]
@@ -94,6 +105,28 @@
  :selected-location-id
  (fn [db [_]]
    (reaction (get @db :selected-location-id))))
+
+(defn handle-location-settings-http-event [location-settings-response]
+  (js/console.log "location-settings-response")
+  (re-frame/dispatch [:location-settings-response (map #(into {:key (:_id %)} %) (keywordize-keys (js->clj location-settings-response)))]))
+
+(re-frame/register-sub
+ :location-settings
+ (fn [db [_ type]]
+   (let  [location-id (re-frame/subscribe [:selected-location-id])
+          query-token (GET-SECURE (str "/api/locations/" @location-id "/facilityLocationSettings") {
+                                                       :handler handle-location-settings-http-event})]
+     (make-reaction
+      (fn [] (get-in @db [:location-settings]))))))
+
+(re-frame/register-sub
+ :active-location
+ (fn [db [_]]
+   (js/console.log "selected-location<<<<<<<<")
+   (let [location-id    (re-frame/subscribe [:selected-location-id])
+         locations-list  (re-frame/subscribe [:locations])]
+
+     (reaction (find-first #(= (:_id %) @location-id) @locations-list)))))
 
 (re-frame/register-sub
  :selected-container-id
@@ -159,7 +192,6 @@
 (re-frame/register-sub
  :sub-dynamic
  (fn sub-dynamic [_ _ [project-filter]]
-   (js/console.log "Calling")
    (let [q (do
              (GET-SECURE "/api/extendedProjects" {:handler (fn [project-response] (re-frame/dispatch [:project-response (map #(into {:key (:_id %)} %) (keywordize-keys (js->clj project-response)))]))
                                                   :params project-filter}))]
